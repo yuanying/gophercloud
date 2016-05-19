@@ -52,4 +52,9 @@ type AuthOptions struct {
 	// TokenID allows users to authenticate (possibly as another user) with an
 	// authentication token ID.
 	TokenID string
+
+	// Trust allows users to authenticate with Trust ID,
+	// The TrustID  field is to be used with Identity V3 API only.
+	// ID of the Trust.
+	TrustID string
 }

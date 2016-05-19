@@ -30,6 +30,7 @@ func AuthOptionsFromEnv() (gophercloud.AuthOptions, error) {
 	tenantName := os.Getenv("OS_TENANT_NAME")
 	domainID := os.Getenv("OS_DOMAIN_ID")
 	domainName := os.Getenv("OS_DOMAIN_NAME")
+	trustID := os.Getenv("OS_TRUST_ID")
 
 	if authURL == "" {
 		return nilOptions, ErrNoAuthURL
@@ -52,6 +53,7 @@ func AuthOptionsFromEnv() (gophercloud.AuthOptions, error) {
 		TenantName:       tenantName,
 		DomainID:         domainID,
 		DomainName:       domainName,
+		TrustID:          trustID,
 	}
 
 	return ao, nil

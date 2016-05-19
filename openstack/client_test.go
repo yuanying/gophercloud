@@ -51,6 +51,7 @@ func TestAuthenticatedClientV3(t *testing.T) {
 		UserID:           "me",
 		Password:         "secret",
 		IdentityEndpoint: th.Endpoint(),
+		TrustID:          "9876543210",
 	}
 	client, err := AuthenticatedClient(options)
 	th.AssertNoErr(t, err)

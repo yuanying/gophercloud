@@ -151,6 +151,7 @@ func v3auth(client *gophercloud.ProviderClient, endpoint string, options gopherc
 				ProjectName: options.TenantName,
 				DomainID:    options.DomainID,
 				DomainName:  options.DomainName,
+				TrustID:     options.TrustID,
 			}
 			v3Options.TenantName = ""
 		}
