@@ -139,7 +139,12 @@ func v3auth(client *gophercloud.ProviderClient, endpoint string, options gopherc
 	v3Options := options
 
 	var scope *tokens3.Scope
-	if options.TenantID != "" {
+
+        if options.TrustID != "" {
+		scope = &tokens3.Scope{
+			TrustID:    options.TrustID,
+		}
+	} else if options.TenantID != "" {
 		scope = &tokens3.Scope{
 			ProjectID: options.TenantID,
 		}
@@ -151,7 +156,6 @@ func v3auth(client *gophercloud.ProviderClient, endpoint string, options gopherc
 				ProjectName: options.TenantName,
 				DomainID:    options.DomainID,
 				DomainName:  options.DomainName,
-				TrustID:     options.TrustID,
 			}
 			v3Options.TenantName = ""
 		}

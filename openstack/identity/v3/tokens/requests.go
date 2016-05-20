@@ -35,7 +35,7 @@ func Create(c *gophercloud.ServiceClient, options gophercloud.AuthOptions, scope
 	}
 
         type v3Trust struct {
-		ID *string `json:"id"`
+		ID *string `json:"id,omitempty"`
         }
 
 	type userReq struct {
@@ -62,7 +62,7 @@ func Create(c *gophercloud.ServiceClient, options gophercloud.AuthOptions, scope
 	type scopeReq struct {
 		Domain  *domainReq  `json:"domain,omitempty"`
 		Project *projectReq `json:"project,omitempty"`
-		Trust   *v3Trust    `json:"OS_TRUST_ID,omitempty"`
+		Trust   *v3Trust    `json:"OS-TRUST:trust,omitempty"`
 	}
 
 	type authReq struct {
@@ -180,7 +180,12 @@ func Create(c *gophercloud.ServiceClient, options gophercloud.AuthOptions, scope
 
 	// Add a "scope" element if a Scope has been provided.
 	if scope != nil {
-		if scope.ProjectName != "" {
+		if scope.TrustID != "" {
+                        // TrustID provided.
+                        req.Auth.Scope = &scopeReq{
+                                Trust: &v3Trust{ID: &scope.TrustID},
+                        }
+                } else if scope.ProjectName != "" {
 			// ProjectName provided: either DomainID or DomainName must also be supplied.
 			// ProjectID may not be supplied.
 			if scope.DomainID == "" && scope.DomainName == "" {
@@ -234,14 +239,7 @@ func Create(c *gophercloud.ServiceClient, options gophercloud.AuthOptions, scope
 			}
 		} else if scope.DomainName != "" {
 			return createErr(ErrScopeDomainName)
-		}
-                  else if scope.TrustID != "" {
-			// TrustID provided.
-			req.Auth.Scope = &scopeReq{
-				Trust: &v3Trust{ID: &scope.TrustID},
-			}
-		} 
-                  else {
+		} else {
 			return createErr(ErrScopeEmpty)
 		}
 	}
