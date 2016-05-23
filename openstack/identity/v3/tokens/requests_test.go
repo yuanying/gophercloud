@@ -120,6 +120,31 @@ func TestCreateUsernameDomainNamePassword(t *testing.T) {
 	`)
 }
 
+func TestTrustIDTokenID(t *testing.T) {
+	options := gophercloud.AuthOptions{TokenID: "old_trustee"}
+	scope := &Scope{TrustID: "123456"}
+	authTokenPost(t, options, scope, `
+		{
+		  "auth": {
+		    "identity": {
+			      "methods": [
+		        	"token"
+			      ],
+			      "token": {
+			        "id": "12345abcdef"
+			      }
+		    },
+		    "scope": {
+			      "OS-TRUST:trust": {
+			        "id": "123456"
+			      }
+			    }
+			}
+		}
+
+	`)
+}
+
 func TestCreateTokenID(t *testing.T) {
 	authTokenPost(t, gophercloud.AuthOptions{}, nil, `
 		{
@@ -358,6 +383,14 @@ func TestCreateFailureScopeProjectNameAlone(t *testing.T) {
 	options := gophercloud.AuthOptions{UserID: "myself", Password: "swordfish"}
 	scope := &Scope{ProjectName: "notenough"}
 	authTokenPostErr(t, options, scope, false, ErrScopeDomainIDOrDomainName)
+}
+
+func TestFailurePassword(t *testing.T) {
+	options := gophercloud.AuthOptions{TokenID: "fakeidnopass"}
+        //Service Client must have tokenId or password,
+        //setting include tokenId to false
+	scope := &Scope{TrustID: "notenough"}
+	authTokenPostErr(t, options, scope, false, ErrMissingPassword)
 }
 
 func TestCreateFailureScopeProjectNameAndID(t *testing.T) {

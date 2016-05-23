@@ -128,6 +128,10 @@ func AuthenticateV3(client *gophercloud.ProviderClient, options gophercloud.Auth
 }
 
 func v3auth(client *gophercloud.ProviderClient, endpoint string, options gophercloud.AuthOptions) error {
+        //In case of Trust TokenId would be Provided so we have to populate the value in service client
+        //to not throw password error,also if it is not provided it will be empty which maintains
+        //the current implementation.
+        client.TokenID = options.TokenID
 	// Override the generated service endpoint with the one returned by the version endpoint.
 	v3Client := NewIdentityV3(client)
 	if endpoint != "" {

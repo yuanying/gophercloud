@@ -12,7 +12,7 @@ type Scope struct {
 	ProjectName string
 	DomainID    string
 	DomainName  string
-        TrustID     string
+	TrustID     string
 }
 
 func subjectTokenHeaders(c *gophercloud.ServiceClient, subjectToken string) map[string]string {
@@ -34,9 +34,9 @@ func Create(c *gophercloud.ServiceClient, options gophercloud.AuthOptions, scope
 		ID     *string    `json:"id,omitempty"`
 	}
 
-        type v3Trust struct {
+	type v3Trust struct {
 		ID *string `json:"id,omitempty"`
-        }
+	}
 
 	type userReq struct {
 		ID       *string    `json:"id,omitempty"`
@@ -181,11 +181,11 @@ func Create(c *gophercloud.ServiceClient, options gophercloud.AuthOptions, scope
 	// Add a "scope" element if a Scope has been provided.
 	if scope != nil {
 		if scope.TrustID != "" {
-                        // TrustID provided.
-                        req.Auth.Scope = &scopeReq{
-                                Trust: &v3Trust{ID: &scope.TrustID},
-                        }
-                } else if scope.ProjectName != "" {
+			// TrustID provided.
+			req.Auth.Scope = &scopeReq{
+				Trust: &v3Trust{ID: &scope.TrustID},
+			}
+		} else if scope.ProjectName != "" {
 			// ProjectName provided: either DomainID or DomainName must also be supplied.
 			// ProjectID may not be supplied.
 			if scope.DomainID == "" && scope.DomainName == "" {
